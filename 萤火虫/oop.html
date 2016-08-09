@@ -1,0 +1,70 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml">
+<head>
+<meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
+<title>无标题文档</title>
+<style>
+*{
+	margin:0;
+	padding:0;
+}
+.box{
+	position:absolute;
+	left:0;
+	top:0;
+	width:100%;
+	height:100%;
+	background:url(images/bg.jpg) no-repeat center top;
+	background-size:auto 100%;
+}
+.box img{
+	width:20px;
+	position:absolute;
+	left:0;
+	top:0;
+}
+</style>
+<script type="text/javascript" src="../../js/jquery.min.3.js"></script>
+<script>
+function Star(){
+	this.star = $("<img src='images/1.jpg'>");
+	this.x = 0;
+	this.y = 0;
+	this.movespeed = 0;
+}
+Star.prototype={
+	init:function(){
+		this.star.css({"left":this.x,"top":this.y});
+		$(".box").append(this.star);//图片加入内容区
+		return this;
+	},
+	pos:function(){
+		this.x = Math.floor(Math.random()*(window.innerWidth-20));
+		this.y = Math.floor(Math.random()*(window.innerHeight-20));
+		return this;
+	},
+	speed:function(){
+		this.movespeed = (Math.floor(Math.random()*6)+5)*1000;
+		return this;
+	},
+	move:function(){
+		var _this = this;
+		this.star.animate({"left":this.x,"top":this.y}, this.movespeed, function(){
+			_this.speed().pos().move();
+		});
+		return this;
+	}
+}
+$(function(){
+	for(var i=0; i<20; i++){
+		new Star().pos().init().speed().pos().move();
+	}
+});
+</script>
+</head>
+
+<body>
+<div class="box">
+</div>
+</body>
+</html>

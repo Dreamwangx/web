@@ -1,0 +1,94 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml">
+<head>
+<meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
+<title>无标题文档</title>
+<style>
+div{
+	width:400px;
+	height:400px;
+	position:relative;
+	margin:20px;
+	float:left;
+	cursor:move;
+	overflow:hidden;
+}
+div.small_box{
+	z-index:99;
+}
+div.small_box span{
+	width:100px;
+	height:100px;
+	background:#000;
+	opacity:0.5;
+	filter:alpha(opacity:50);
+	position:absolute;
+	left:0;
+	top:0;
+	margin-left:-50px;
+	margin-top:-50px;
+	display:none;
+}
+div.big_box{
+	border:solid 3px #000;
+	display:none;
+}
+div.big_box img{
+	position:absolute;
+	z-index:-1;
+	left:0;
+	top:0;
+	margin-left:200px;
+	margin-top:200px;
+}
+</style>
+<script type="text/javascript" src="../jquery.js"></script>
+<script>
+$(function(){
+	var $small = $(".small_box");
+	var $big = $(".big_box");
+	var $span = $small.find("span");
+	var $bImg = $big.find("img");
+	var $scale = $bImg.width()/$big.width();
+	var $spanwh = {"width":$small.width()/$scale,"height":$small.height()/$scale};
+	
+	$small.on({
+		mouseover:function(){
+			$span.css($spanwh);
+			$span.css({"margin-left":-$spanwh.width/2,"margin-top":-$spanwh.height/2});
+			$span.show();
+			$big.show();
+			$small.mousemove(function(e){
+				//e = e || event;
+				var $x = e.pageX - $small.offset().left;
+				var $y = e.pageY - $small.offset().top;
+				if($x <= $span.width()/2){
+					$x = $span.width()/2;
+				}else if($x >= $small.width()-$span.width()/2){
+					$x = $small.width()-$span.width()/2
+				}
+				if($y <= $span.height()/2){
+					$y = $span.height()/2;
+				}else if($y >= $small.height()-$span.height()/2){
+					$y = $small.height()-$span.height()/2
+				}
+				var $bigX = $bImg.width()*($x/$small.width());
+				var $bigY = $bImg.height()*($y/$small.height());
+				$span.css({"left":$x+"px","top":$y+"px"});
+				$bImg.css({"left":-$bigX,"top":-$bigY});
+			});
+		},
+		mouseout:function(){
+			$span.hide();
+			$big.hide();
+		}
+	});
+});
+</script>
+</head>
+
+<body>
+<div class="small_box"><img src="images/1.jpg" width="100%"><span></span></div>
+<div class="big_box"><img src="images/1.jpg" width="1080"></div>
+</body>
+</html>
